@@ -1,0 +1,16 @@
+echo
+
+rm -rf venv .cache
+
+echo
+
+ls .
+
+echo
+
+sleep 3
+
+echo ". safe..."
+
+echo
+
