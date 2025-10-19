@@ -35,13 +35,13 @@ Big_Spoti will install all necessary dependicies if not already loaded on the sy
 
     chmod +x SPOTIPY
 
+    ```
+
+5.  Enable and run Big_Spoti:
+    ```
+
     chmod +x big_spoti.sh
-
-    ```
-
-5.  Run Big_Spoti:
-    ```
-
+    
     ./big_spoti.sh
 
     ```
