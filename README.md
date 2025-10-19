@@ -46,7 +46,7 @@ Big_Spoti will install all necessary dependicies if not already loaded on the sy
 
     ```
 ## Features
-- Handles loading .SPOTIPY
+- Handles loading SPOTIPY
 - Creates your output directory (local, SMB, or SSH)
 - Loads playlists URL's (space seperated)
 - Create and launch SPOTIFY_DL_COMMAND (ie, spotify_dl -l https://open.spotify.com/playlist/######, https://open.spotify.com/plalist/#######, ..., -w -s y -k)
