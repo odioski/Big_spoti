@@ -2,6 +2,7 @@ Big_Spoti:
 
 Zenity enabled wrapper for Spotify_dl.
 
+Big_Spoti will install all necessary dependicies if not already loaded on the system or you can grab them beforehand with the following commands:
 
 ## Installation
 
@@ -42,7 +43,6 @@ Zenity enabled wrapper for Spotify_dl.
     ./big_spoti.sh
 
     ```
-
 ## Features
 - Handles loading .SPOTIPY
 - Creates your output directory (local, SMB, or SSH)
