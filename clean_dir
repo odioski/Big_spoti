@@ -10,7 +10,7 @@ echo
 
 sleep 3
 
-echo ". safe..."
+echo $PWD is safe...
 
-echo
+sleep 2
 
