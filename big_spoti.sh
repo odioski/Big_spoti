@@ -25,27 +25,10 @@ notify() {
     fi
 }
 
-# Play dialog sound based on dialog name
-play_dialog_sound() {
-    local dialog_name="$1"
-    if [[ "$SOUND_ENABLED" == true ]]; then
-        local sound_file="./sounds/${dialog_name}.wav"
-        if [[ -f "$sound_file" ]]; then
-            local players=("paplay" "aplay" "play" "ffplay -nodisp -autoexit" "mplayer")
-            for player in "${players[@]}"; do
-                if command -v "${player%% *}" >/dev/null 2>&1; then
-                    timeout 3 $player "$sound_file" >/dev/null 2>&1 && return 0
-                fi
-            done
-        fi
-    fi
-}
-
 # Simple info dialog
 show_info() {
     local message="$1"
     local timeout="${2:-0}"
-    play_dialog_sound "info"
     if [[ $timeout -gt 0 ]]; then
         zenity --info --title="$WINDOW_TITLE" --text="$message" --timeout="$timeout" 2>/dev/null || echo "$message"
     else
@@ -56,16 +39,15 @@ show_info() {
 # Simple question dialog
 ask_question() {
     local question="$1"
-    play_dialog_sound "question"
     zenity --question --title="$WINDOW_TITLE" --text="$question" 2>/dev/null
     return $?
+
 }
 
 # Simple error dialog
 show_error() {
     local message="$1"
     echo "ERROR: $message"
-    play_dialog_sound "error"
     zenity --error --title="$WINDOW_TITLE" --text="$message" 2>/dev/null || true
 }
 
@@ -73,7 +55,6 @@ show_error() {
 show_warning() {
     local message="$1"
     echo "WARNING: $message"
-    play_dialog_sound "warning"
     zenity --warning --title="$WINDOW_TITLE" --text="$message" 2>/dev/null || true
 }
 
@@ -81,7 +62,6 @@ show_warning() {
 SOUND_ENABLED=true
 if ask_question "Enable sound feedback for success notifications?"; then
     SOUND_ENABLED=true
-    play_success_sound
 else
     SOUND_ENABLED=false
 fi
@@ -93,7 +73,11 @@ play_success_sound() {
         
         # Try multiple sound files and players
         SOUND_FILES=(
-            "./sounds/success.wav"
+            "/usr/share/sounds/alsa/Front_Left.wav"
+            "/usr/share/sounds/sound-icons/prompt.wav"
+            "/usr/share/sounds/generic.wav"
+            "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
+            "/usr/share/sounds/freedesktop/stereo/complete.oga"
         )
         
         SOUND_PLAYERS=(
@@ -421,8 +405,8 @@ fi
 
 echo "Creating Python virtual environment..."
 sudo rm -rf venv .venv
-sudo apt install python3.12-venv -y
-python3 -m venv venv
+sudo apt install python3.13-venv -y
+python3.13 -m venv venv
 notify "Virtual environment created" true
 
 
