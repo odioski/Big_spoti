@@ -1,4 +1,4 @@
-# Dialog Contexts for Recording (Enumerated)
+# Dialog Contexts for Recording/Nararation (Enumerated)
 
 # Info Dialogs
 I01. "Enable sound feedback for success notifications?"
