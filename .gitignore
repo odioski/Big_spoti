@@ -1,3 +1,5 @@
 SPOTIPY
 *txt
 .cache
+venv
+.venv
