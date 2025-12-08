@@ -45,7 +45,9 @@ Big_Spoti will install all necessary dependicies if not already loaded on the sy
     ./big_spoti.sh
 
     ```
+
 ## Features
+
 - Handles loading SPOTIPY
 - Creates your output directory (local, SMB, or SSH)
 - Loads playlists URL's (space seperated)
