@@ -1,6 +1,6 @@
 echo
 
-rm -rf .venv venv .cache
+rm -rf .venv .cache
 
 echo
 

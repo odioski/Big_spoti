@@ -397,16 +397,26 @@ Ready to start?" 5
 echo "Setting up environment..."
 
 # Create venv if needed
-if [[  -d "venv" ]]; then
+if ! [[  -d "venv" ]]; then
 
     ./clean_dir
 
+elif [[ -d "venv"  ]]; then
+
+    sudo apt update -y
+
+    sudo apt upgrade -y
+
+else
+
+    echo "Creating Python virtual environment..."
+
+    sudo apt install python3.13-venv -y
+
+    python3.13 -m venv venv
+
 fi
 
-echo "Creating Python virtual environment..."
-sudo rm -rf venv .venv
-sudo apt install python3.13-venv -y
-python3.13 -m venv venv
 notify "Virtual environment created" true
 
 
