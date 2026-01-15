@@ -397,7 +397,7 @@ Ready to start?" 5
 echo "Setting up environment..."
 
 # Create venv if needed
-if ! [[  -d "venv" ]]; then
+if [[  -d ".venv" ]]; then
 
     ./clean_dir
 
@@ -569,9 +569,6 @@ This may take several minutes..." 3
         show_error "Failed to download playlist $CURRENT_PLAYLIST. Check connection and credentials."
     fi
 done
-
-show_info "All downloads completed!" 5
-notify "All downloads completed" true
 
 # Create ISOs
 echo "Checking for directories to create ISOs..."
