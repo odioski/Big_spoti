@@ -446,6 +446,10 @@ if [[ "$NEED_INSTALL" == true ]]; then
 else
     show_info "All dependencies ready!" 5
     notify "All dependencies ready" true
+
+then
+    show_info "All downloads completed!" 5
+    notify "All downloads completed" true
 fi
 
 # Get output directory
