@@ -1,6 +1,6 @@
 echo
 
-rm -rf .venv .cache
+sudo rm -rf .venv .cache
 
 echo
 

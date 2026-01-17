@@ -392,6 +392,8 @@ Features:
 Ready to start?" 5
 
 # Load SPOTIPY environment
+
+sudo chmod +rwx ./SPOTIPY
 . ./SPOTIPY
 
 echo "Setting up environment..."
@@ -401,22 +403,27 @@ if [[  -d ".venv" ]]; then
 
     ./clean_dir
 
-elif [[ -d "venv"  ]]; then
-
-    sudo apt update -y
-
-    sudo apt upgrade -y
-
-else
-
-    echo "Creating Python virtual environment..."
-
-    sudo apt install python3.13-venv -y
-
-    python3.13 -m venv venv
-
 fi
 
+echo "Creating Python virtual environment..."
+
+sleep 2
+
+echo "Set Permissions: "
+
+sleep 1
+
+sudo chown -hR "$USER":"$USER" ./
+sudo chown -hR "$USER":"$USER" "$HOME"/Music
+
+sleep 1
+
+echo "Continuing... "
+
+sleep 2
+
+sudo apt install python3.*-venv -y
+python3 -m venv venv
 notify "Virtual environment created" true
 
 
@@ -439,6 +446,8 @@ fi
 
 if [[ "$NEED_INSTALL" == true ]]; then
     echo "Installing Python dependencies..."
+
+    python3 -m venv ./venv
     venv/bin/pip install --upgrade pip
     venv/bin/pip install spotify_dl
     show_info "Dependencies installed!" 5
@@ -446,10 +455,6 @@ if [[ "$NEED_INSTALL" == true ]]; then
 else
     show_info "All dependencies ready!" 5
     notify "All dependencies ready" true
-
-then
-    show_info "All downloads completed!" 5
-    notify "All downloads completed" true
 fi
 
 # Get output directory
@@ -457,12 +462,20 @@ CURRENT_USER=$(whoami)
 USER_MUSIC_DIR="$HOME/Music"
 
 if ask_question "Use default music directory ($USER_MUSIC_DIR)?"; then
+    echo "I will need to santize to make sure...sorry."
+    sleep 3
     OUTPUT_DIR="$USER_MUSIC_DIR"
+    COMMAND=$(sudo chown -hR "$USER":"$USER" "$USER_MUSIC_DIR"/)
+    echo "This is happening next: $COMMAND"
+    echo "$COMMAND"
+    sleep 2
 else
     OUTPUT_DIR=$(zenity --file-selection --directory --title="Select Output Directory" 2>/dev/null)
     if [[ -z "$OUTPUT_DIR" ]]; then
         OUTPUT_DIR="$USER_MUSIC_DIR"
-        show_info "Using default directory: $USER_MUSIC_DIR" 5
+        show_info "Using default directory: $USER_MUSIC_DIR" 3;
+        echo "Done... it/'s your/'s"
+        sleep 2
     fi
 fi
 
@@ -574,6 +587,9 @@ This may take several minutes..." 3
     fi
 done
 
+show_info "All downloads completed!" 5
+notify "All downloads completed" true
+
 # Create ISOs
 echo "Checking for directories to create ISOs..."
 ISO_CREATED=0
@@ -658,15 +674,15 @@ if ask_question "Copy files to another location?"; then
                 SMB_PASS=$(zenity --password --title="SMB Password" 2>/dev/null)
                 
                 if [[ -n "$SMB_SERVER" && -n "$SMB_USER" && -n "$SMB_PASS" ]]; then
-                    if sudo mount -t cifs "$SMB_SERVER" $SELECTED_MOUNT_PATH -o username=$SMB_USER,password=$SMB_PASS; then
+                    if sudo mount -t cifs "$SMB_SERVER" "$SELECTED_MOUNT_PATH" -o username="$SMB_USER",password="$SMB_PASS"; then
                         # Verify mount worked by checking contents
                         if analyze_mount_point "$SELECTED_MOUNT_PATH"; then
                             DESTINATION_PATH="$SELECTED_MOUNT_PATH"
                             NEED_UNMOUNT=true
-                            show_info "SMB share mounted successfully!
+                            show_info "SMB share mounted successfully!"
 
-Mount point: $SELECTED_MOUNT_PATH
-$MOUNT_ANALYSIS" 5
+Mount point: "$SELECTED_MOUNT_PATH"
+"$MOUNT_ANALYSIS" 5
                             notify "SMB share mounted successfully" true
                         else
                             show_error "Mount succeeded but contents not accessible"
@@ -688,7 +704,7 @@ $MOUNT_ANALYSIS" 5
                 SSH_REMOTE=$(zenity --entry --title="SSH Remote" --text="Enter remote (user@host:/path):" 2>/dev/null)
                 
                 if [[ -n "$SSH_REMOTE" ]]; then
-                    if sshfs $SSH_REMOTE $SELECTED_MOUNT_PATH; then
+                    if sshfs "$SSH_REMOTE $SELECTED_MOUNT_PATH"; then
                         # Verify mount worked by checking contents
                         if analyze_mount_point "$SELECTED_MOUNT_PATH"; then
                             DESTINATION_PATH="$SELECTED_MOUNT_PATH"
@@ -717,7 +733,7 @@ $MOUNT_ANALYSIS" 5
         
         # Count and list what's available
         ISO_COUNT=$(find "$OUTPUT_DIR" -name "*.iso" 2>/dev/null | wc -l)
-        MP3_DIRS=$(find "$OUTPUT_DIR" -type d -name "*" 2>/dev/null | grep -v "^$OUTPUT_DIR$" | wc -l)
+        MP3_DIRS=$(find "$OUTPUT_DIR" -type d -name "*" 2>/dev/null | grep -c "^$OUTPUT_DIR$" )
         
         if [[ $ISO_COUNT -gt 0 ]]; then
             TRANSFER_PREVIEW="$TRANSFER_PREVIEW
