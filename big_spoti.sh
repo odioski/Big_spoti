@@ -418,6 +418,17 @@ if ! venv/bin/pip show spotify_dl >/dev/null 2>&1; then
     NEED_INSTALL=true
 fi
 
+if [[ "$NEED_INSTALL" == true ]]; then
+    echo "Installing Python dependencies..."
+    venv/bin/pip install --upgrade pip
+    venv/bin/pip install spotify_dl ffmpeg
+    show_info "Dependencies installed!" 5
+    notify "Dependencies installed" true
+else
+    show_info "All dependencies ready!" 5
+    notify "All dependencies ready" true
+fi
+
 if ! command -v ffmpeg >/dev/null 2>&1; then
     if ask_question "ffmpeg is required but not installed. Install it now?"; then
         echo "Installing ffmpeg..."
@@ -425,17 +436,6 @@ if ! command -v ffmpeg >/dev/null 2>&1; then
     else
         show_warning "ffmpeg is required for audio processing!"
     fi
-fi
-
-if [[ "$NEED_INSTALL" == true ]]; then
-    echo "Installing Python dependencies..."
-    venv/bin/pip install --upgrade pip
-    venv/bin/pip install spotify_dl
-    show_info "Dependencies installed!" 5
-    notify "Dependencies installed" true
-else
-    show_info "All dependencies ready!" 5
-    notify "All dependencies ready" true
 fi
 
 # Get output directory
