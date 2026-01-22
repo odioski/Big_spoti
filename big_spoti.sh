@@ -455,8 +455,7 @@ if ! command -v ffmpeg >/dev/null 2>&1; then
     fi
 fi
 
-<<<<<<< HEAD
-=======
+
 if [[ "$NEED_INSTALL" == true ]]; then
     echo "Installing Python dependencies..."
 
@@ -470,7 +469,6 @@ else
     notify "All dependencies ready" true
 fi
 
->>>>>>> a000c53b532b80849261eabade12776bd3e019ca
 # Get output directory
 CURRENT_USER=$(whoami)
 USER_MUSIC_DIR="$HOME/Music"
