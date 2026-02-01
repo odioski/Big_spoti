@@ -414,7 +414,7 @@ echo "Set Permissions: "
 sleep 1
 
 sudo chown -hR "$USER":"$USER" ./
-sudo chown -hR "$USER":"$USER" "$HOME"/Music
+sudo chown -hR "$USER":"$USER" "$HOME"/
 
 sleep 1
 
@@ -438,7 +438,7 @@ fi
 if [[ "$NEED_INSTALL" == true ]]; then
     echo "Installing Python dependencies..."
     venv/bin/pip install --upgrade pip
-    venv/bin/pip install spotify_dl ffmpeg
+    venv/bin/pip install spotify_dl
     show_info "Dependencies installed!" 5
     notify "Dependencies installed" true
 else
@@ -456,19 +456,6 @@ if ! command -v ffmpeg >/dev/null 2>&1; then
 fi
 
 
-if [[ "$NEED_INSTALL" == true ]]; then
-    echo "Installing Python dependencies..."
-
-    python3 -m venv ./venv
-    venv/bin/pip install --upgrade pip
-    venv/bin/pip install spotify_dl
-    show_info "Dependencies installed!" 5
-    notify "Dependencies installed" true
-else
-    show_info "All dependencies ready!" 5
-    notify "All dependencies ready" true
-fi
-
 # Get output directory
 CURRENT_USER=$(whoami)
 USER_MUSIC_DIR="$HOME/Music"
@@ -477,6 +464,9 @@ if ask_question "Use default music directory ($USER_MUSIC_DIR)?"; then
     echo "I will need to santize to make sure...sorry."
     sleep 3
     OUTPUT_DIR="$USER_MUSIC_DIR"
+    if [[ ! -d "$USER_MUSIC_DIR" ]]; then
+        sudo mkdir -p "$OUTPUT_DIR"
+    fi
     COMMAND=$(sudo chown -hR "$USER":"$USER" "$USER_MUSIC_DIR"/)
     echo "This is happening next: $COMMAND"
     echo "$COMMAND"
